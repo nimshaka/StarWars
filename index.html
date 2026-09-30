@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://swapi.dev" crossorigin />
+    <title>Planet Explorer — The Star Wars Planetary Archive</title>
+    <meta
+      name="description"
+      content="Search, sort and compare every planet in the Star Wars archive. Diameter, climate, terrain, gravity and population for each world."
+    />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" content="#f8fafc" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0b0c14" media="(prefers-color-scheme: dark)" />
+    <script>
+      // Apply the stored theme before first paint to avoid a flash of the
+      // wrong colour scheme. Mirrors src/lib/theme.ts.
+      (function () {
+        try {
+          var stored = localStorage.getItem("planet-explorer:theme");
+          var dark =
+            stored === "dark" ||
+            ((stored === null || stored === "system") &&
+              window.matchMedia("(prefers-color-scheme: dark)").matches);
+          document.documentElement.classList.toggle("dark", dark);
+          document.documentElement.style.colorScheme = dark ? "dark" : "light";
+        } catch (error) {
+          /* Storage blocked — fall back to the CSS default. */
+        }
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
