@@ -141,6 +141,23 @@
     @apply ring-ring/70 outline-none ring-2 ring-offset-2 ring-offset-background;
   }
 
+  /*
+   * Tailwind 4 no longer sets a pointer cursor on buttons, so restore it once
+   * here for every clickable control instead of per component. Links already
+   * get a pointer from the browser.
+   */
+  button:not(:disabled),
+  [role="button"]:not([aria-disabled="true"]),
+  label[for],
+  summary {
+    cursor: pointer;
+  }
+
+  button:disabled,
+  [aria-disabled="true"] {
+    cursor: not-allowed;
+  }
+
   /* Tabular figures keep number columns from jittering between pages. */
   .tabular {
     font-variant-numeric: tabular-nums;

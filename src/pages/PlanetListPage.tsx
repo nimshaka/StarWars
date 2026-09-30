@@ -30,39 +30,25 @@ import {
 import { cn } from "@/lib/utils";
 import type { SortOrder, ViewMode } from "@/types";
 
-/**
- * The planet list.
- *
- * Search, page and sort all live in the URL, so any view can be shared or
- * bookmarked and the back button works. The chosen layout is a personal
- * preference rather than part of the view, so it lives in localStorage.
- */
 export default function PlanetListPage() {
   const [searchParams, setSearchParams] = useSearchParams();
 
-  // --- State read from the URL -------------------------------------------
   const page = parsePageParam(searchParams.get("page"));
   const query = (searchParams.get("q") ?? "").trim();
   const sort = parseSortOrder(searchParams.get("sort"));
 
-  // --- Search box --------------------------------------------------------
-  // The input updates on every keystroke; the URL only updates once typing
-  // pauses, so we do not fire a request per character.
   const [searchInput, setSearchInput] = useState(query);
   const debouncedSearch = useDebounce(searchInput);
 
-  // --- Layout ------------------------------------------------------------
   const [view, setView] = useLocalStorage<ViewMode>(
     STORAGE_KEYS.view,
     "grid",
     VIEW_MODES,
   );
-  // Phones always get cards: a six-column table does not fit, and rendering
-  // both layouts would put the same content in the DOM twice.
+
   const canUseTable = useMediaQuery(TABLE_MEDIA_QUERY);
   const activeView: ViewMode = canUseTable ? view : "grid";
 
-  // --- Data --------------------------------------------------------------
   const { data, isPending, isError, error, isFetching, refetch } = usePlanets(
     page,
     query,
@@ -75,8 +61,6 @@ export default function PlanetListPage() {
 
   const total = data?.count ?? 0;
 
-  // --- URL updates -------------------------------------------------------
-  /** Change some query parameters while leaving the others alone. */
   const updateParams = useCallback(
     (change: (params: URLSearchParams) => void, replace = false) => {
       setSearchParams(
@@ -91,12 +75,8 @@ export default function PlanetListPage() {
     [setSearchParams],
   );
 
-  // Remembers the last term we ourselves put in the URL. That lets the two
-  // effects below tell our own updates apart from browser navigation, so they
-  // do not fight each other.
   const lastPushedQuery = useRef(query);
 
-  // Typing -> URL. `replace` keeps each keystroke out of the back history.
   useEffect(() => {
     const term = debouncedSearch.trim();
     if (term === lastPushedQuery.current) return;
@@ -105,11 +85,10 @@ export default function PlanetListPage() {
     updateParams((params) => {
       if (term) params.set("q", term);
       else params.delete("q");
-      params.delete("page"); // a new search starts at page 1
+      params.delete("page");
     }, true);
   }, [debouncedSearch, updateParams]);
 
-  // URL -> input, for back/forward or a link that changed the search term.
   useEffect(() => {
     if (query === lastPushedQuery.current) return;
     lastPushedQuery.current = query;
@@ -137,7 +116,6 @@ export default function PlanetListPage() {
     [updateParams],
   );
 
-  // A page number past the end of the archive comes back from SWAPI as a 404.
   const pageOutOfRange = isError && isApiError(error) && error.status === 404;
 
   return (

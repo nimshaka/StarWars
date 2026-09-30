@@ -1,13 +1,4 @@
 import { useCallback, useEffect, useState } from "react";
-
-/**
- * State that is saved to localStorage.
- *
- * `allowed` lists the only values accepted, so a stale or hand-edited entry
- * cannot put the app into an invalid state. Storage can be unavailable (private
- * browsing, blocked site data), so every access is wrapped — the value then
- * simply does not persist.
- */
 export function useLocalStorage<T extends string>(
   key: string,
   initialValue: T,
@@ -25,9 +16,7 @@ export function useLocalStorage<T extends string>(
   useEffect(() => {
     try {
       localStorage.setItem(key, value);
-    } catch {
-      // Not persistable — carry on with the in-memory value.
-    }
+    } catch {}
   }, [key, value]);
 
   const set = useCallback((next: T) => setValue(next), []);

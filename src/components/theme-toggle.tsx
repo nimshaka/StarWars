@@ -44,10 +44,7 @@ export function ThemeToggle() {
           <DropdownMenuItem
             key={value}
             onSelect={() => setTheme(value)}
-            className={cn(
-              "cursor-pointer",
-              theme === value && "text-primary font-medium",
-            )}
+            className={cn(theme === value && "font-medium text-primary")}
           >
             <Icon aria-hidden />
             {label}

@@ -1,8 +1,4 @@
-/**
- * A planet exactly as SWAPI returns it.
- * Note: every numeric field arrives as a string, and missing values come
- * through as the literal text "unknown".
- */
+
 export interface Planet {
   name: string;
   rotation_period: string;
@@ -18,7 +14,6 @@ export interface Planet {
   url: string;
 }
 
-/** One page of planets. SWAPI always returns 10 results per page. */
 export interface PlanetsResponse {
   count: number;
   next: string | null;

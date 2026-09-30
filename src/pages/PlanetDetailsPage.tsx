@@ -23,7 +23,13 @@ import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ORB_SIZES } from "@/constants";
 import { usePlanet } from "@/hooks/usePlanets";
-import { capitalize, formatNumber, formatText, toTags, withUnit } from "@/lib/format";
+import {
+  capitalize,
+  formatNumber,
+  formatText,
+  toTags,
+  withUnit,
+} from "@/lib/format";
 import type { Planet } from "@/types";
 
 function BackLink() {
@@ -37,7 +43,6 @@ function BackLink() {
   );
 }
 
-/** Wraps the back link around whatever the page is currently showing. */
 function DetailsLayout({ children }: { readonly children: React.ReactNode }) {
   return (
     <div className="space-y-4">
@@ -72,11 +77,18 @@ function DetailsSkeleton() {
   );
 }
 
-/** The six headline measurements, in the order they are shown. */
 function buildStats(planet: Planet) {
   return [
-    { icon: LuRuler, label: "Diameter", value: withUnit(planet.diameter, "km") },
-    { icon: LuUsers, label: "Population", value: formatNumber(planet.population) },
+    {
+      icon: LuRuler,
+      label: "Diameter",
+      value: withUnit(planet.diameter, "km"),
+    },
+    {
+      icon: LuUsers,
+      label: "Population",
+      value: formatNumber(planet.population),
+    },
     {
       icon: LuWeight,
       label: "Gravity",
@@ -102,7 +114,7 @@ function buildStats(planet: Planet) {
 
 export default function PlanetDetailsPage() {
   const { id = "" } = useParams();
-  // SWAPI ids are plain numbers, so anything else is rejected without a request.
+
   const isValidId = /^\d+$/.test(id);
 
   const { data, isPending, isError, error, refetch } = usePlanet(id, isValidId);

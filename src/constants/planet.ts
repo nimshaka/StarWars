@@ -1,29 +1,19 @@
 import type { Biome, BiomePalette } from "@/types";
 
-/** Values SWAPI uses in place of a real measurement. */
 export const UNKNOWN_VALUES = ["unknown", "n/a", "none", ""];
 
-/** Largest diameter in the archive (Bespin, ~118,000 km) — the scale ceiling. */
 export const MAX_DIAMETER_KM = 118_000;
 
-/** Planets over this diameter are drawn with a gas-giant ring. */
 export const RING_THRESHOLD_KM = 50_000;
 
-/** Smallest fraction of its box an orb may shrink to, so it stays visible. */
 export const DEFAULT_MIN_ORB_RATIO = 0.4;
 
-/** Orb box sizes in px, per place the orb appears. */
 export const ORB_SIZES = {
   table: 40,
   card: 64,
   details: 144,
 } as const;
 
-/**
- * Keywords that identify each biome, checked in this order — the first biome
- * with a matching keyword wins, so the more specific ones come first.
- * Matching is a plain lowercase substring test, so "ice" also finds "ice caves".
- */
 export const BIOME_KEYWORDS: Record<Biome, string[]> = {
   gas: ["gas", "nebula"],
   ice: [
